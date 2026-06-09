@@ -1,0 +1,18 @@
+Return-Path: <ceo-office@consulting-example.test>
+Received: from suspicious-relay.example (suspicious-relay.example [198.51.100.45]) by mx.recipient.example with ESMTP id bec123; Wed, 3 Jun 2026 12:30:00 +0200
+Authentication-Results: mx.recipient.example; spf=softfail smtp.mailfrom=consulting-example.test; dkim=none; dmarc=fail header.from=consulting-example.test
+From: "CEO Office" <ceo@consulting-example.test>
+To: Philip Ritter <philip@example.test>
+Reply-To: urgent-ceo-request@proton.me
+Subject: Quick confidential request
+Message-ID: <quick-request-7788@suspicious-relay.example>
+Date: Wed, 3 Jun 2026 12:25:00 +0200
+
+Hi Philip,
+
+I am in a meeting and need you to reply immediately. Please confirm if you can help process a confidential payment today.
+
+Do not call me, just reply to this email.
+
+Regards,
+CEO

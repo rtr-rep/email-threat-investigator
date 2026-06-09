@@ -1,0 +1,21 @@
+Delivered-To: analyst.forwarded@example.com
+Delivered-To: original.recipient@example.net
+X-Forwarded-To: analyst.forwarded@example.com
+X-Forwarded-For: original.recipient@example.net analyst.forwarded@example.com
+Received: from mail-vendor.example (mail-vendor.example. [198.51.100.23])
+        by mx.google.com with ESMTPS id synthetic
+        for <original.recipient@example.net>;
+        Thu, 04 Jun 2026 12:00:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; d=google.com; s=arc-20240605; cv=none; b=synthetic
+ARC-Message-Signature: i=1; a=rsa-sha256; d=google.com; s=arc-20240605; b=synthetic
+ARC-Authentication-Results: i=1; mx.google.com; dkim=pass header.i=@vendor.example; spf=pass smtp.mailfrom=bounce@vendor.example; dmarc=pass header.from=vendor.example
+Authentication-Results: mx.google.com; spf=pass smtp.mailfrom=forwarded-by@gmail.com
+Return-Path: <forwarded-by@gmail.com>
+From: "Vendor Support" <support@vendor.example>
+To: original.recipient@example.net
+Subject: Forwarded support ticket update
+Message-ID: <synthetic-forwarded@vendor.example>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+
+This is a legitimate support-ticket update that was forwarded through Gmail.

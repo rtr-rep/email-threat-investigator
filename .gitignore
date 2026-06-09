@@ -1,0 +1,28 @@
+.venv/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.coverage
+htmlcov/
+
+# Local/generated investigation output
+reports/*.md
+!reports/README.md
+exports/
+
+# Never commit downloaded corpora, live samples, or quarantine material
+data/external/
+data/private/
+local-samples/
+real-emails/
+quarantine/
+*.malware
+*.unsafe
+
+# Streamlit/local environment
+.streamlit/secrets.toml
+.env
+.env.*

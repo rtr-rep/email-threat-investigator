@@ -1,0 +1,14 @@
+From: "Contoso Finance" <finance@contoso.example>
+To: Philip Ritter <philip@example.test>
+Reply-To: contoso-payments-helpdesk@gmail.com
+Return-Path: <bounce@mailer.example>
+Subject: Urgent payment confirmation required
+Message-ID: <20260603.123456@contoso.example>
+Date: Wed, 3 Jun 2026 10:15:00 +0200
+
+Hello,
+
+Please reply urgently with confirmation of the bank details for this invoice payment.
+
+Regards,
+Contoso Finance

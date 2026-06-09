@@ -1,0 +1,25 @@
+Delivered-To: recipient@example.com
+Received: from mail.unrelated-billing.example (mail.unrelated-billing.example [203.0.113.44])
+        by mx.google.com with ESMTPS id synthetic-paypal
+        for <recipient@example.com>;
+        Thu, 04 Jun 2026 09:12:00 -0700 (PDT)
+Authentication-Results: mx.google.com;
+       spf=fail (google.com: domain of billing@unrelated-billing.example does not designate 203.0.113.44 as permitted sender) smtp.mailfrom=billing@unrelated-billing.example;
+       dkim=fail header.d=unrelated-billing.example;
+       dmarc=fail (p=reject sp=reject dis=none) header.from=unrelated-billing.example
+Return-Path: <billing@unrelated-billing.example>
+Message-ID: <synthetic-paypal-raw-ip-payment-phish@example.test>
+From: "PayPal Support" <billing@unrelated-billing.example>
+Reply-To: paypal-resolution-center@gmail.com
+Subject: Action required: payment hold on your PayPal account
+To: recipient@example.com
+Date: Thu, 04 Jun 2026 09:12:00 -0700
+MIME-Version: 1.0
+Content-Type: text/html; charset="UTF-8"
+
+<html>
+<body>
+<p>Your PayPal account has a payment hold. Confirm payment immediately to avoid restrictions.</p>
+<p><a href="http://198.51.100.77/paypal/login">https://paypal.com/signin</a></p>
+</body>
+</html>

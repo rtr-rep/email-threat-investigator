@@ -1,0 +1,46 @@
+Delivered-To: analyst@example.com
+Received: from talk.online (dfgd.zapto.org. [194.87.31.170])
+        by mx.google.com with ESMTPS id synthetic
+        for <analyst@example.com>;
+        Thu, 04 Jun 2026 03:49:17 -0700 (PDT)
+Authentication-Results: mx.google.com;
+       dkim=permerror (no key for signature) header.i=@pfvfyawt.vpkm48ed.com header.s=smtp;
+       spf=pass smtp.mailfrom=2064-930720@random-bounce.codereactor.uk.net
+Return-Path: <2064-930720@random-bounce.codereactor.uk.net>
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=smtp; d=pfvfyawt.vpkm48ed.com;
+ h=Date:From:To:Subject:Message-ID:Reply-To:MIME-Version:List-Unsubscribe:Content-Type;
+ i=noreply@pfvfyawt.vpkm48ed.com;
+ b=synthetic;
+Date: Thu, 04 Jun 2026 10:49:16 +0000
+From: "KING IPTV" <noreply@pfvfyawt.vpkm48ed.com>
+To: analyst@example.com
+Subject: Pas besoin de plusieurs abonnements — tout dans un seul abonnement
+Message-ID: <synthetic@prod.rqbfvxdots.org>
+Reply-To: suspicious-replies@gmail.com
+MIME-Version: 1.0
+List-Unsubscribe: <https://storage.googleapis.com/socialimpact-investments/socialimpact-investments.html#unsubscribe-token>
+Content-Type: multipart/alternative; boundary="----Calendar_PART_119916"
+
+------Calendar_PART_119916
+Content-Type: text/plain; charset="UTF-8"
+
+Hallo analyst!
+KING IPTV: +22,000 chaînes IPTV, Films, Séries, VOD, Qualité 4K.
+Accéder maintenant: https://storage.googleapis.com/socialimpact-investments/socialimpact-investments.html#landing-token
+
+------Calendar_PART_119916
+Content-Type: text/html; charset="UTF-8"
+
+<!DOCTYPE html>
+<html>
+<head><title>Offre KINGIPTV</title></head>
+<a href="https://storage.googleapis.com/socialimpact-investments/socialimpact-investments.html#wrapped-token" style="color:inherit;text-decoration:none;">
+<body>
+<h1>KINGIPTV</h1>
+<p>+22,000 chaînes IPTV en direct, VOD, Qualité 4K / Ultra HD.</p>
+<a href="https://storage.googleapis.com/socialimpact-investments/socialimpact-investments.html#cta-token">ACCÉDER MAINTENANT</a>
+<p>Si vous ne souhaitez plus recevoir ces emails, <a href="https://storage.googleapis.com/socialimpact-investments/socialimpact-investments.html#unsubscribe-token">Se désinscrire</a></p>
+</body>
+</html>
+
+------Calendar_PART_119916--

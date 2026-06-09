@@ -1,0 +1,31 @@
+Delivered-To: recipient@example.com
+Received: from compromised-supplier.example (compromised-supplier.example [203.0.113.88])
+        by mx.google.com with ESMTPS id synthetic-invoice
+        for <recipient@example.com>;
+        Thu, 04 Jun 2026 10:33:00 -0700 (PDT)
+Authentication-Results: mx.google.com;
+       spf=fail (google.com: domain of ap@compromised-supplier.example does not designate 203.0.113.88 as permitted sender) smtp.mailfrom=ap@compromised-supplier.example;
+       dkim=fail header.d=compromised-supplier.example;
+       dmarc=fail (p=reject sp=reject dis=none) header.from=compromised-supplier.example
+Return-Path: <ap@compromised-supplier.example>
+Message-ID: <synthetic-invoice-attachment-phish@example.test>
+From: "Accounts Payable" <ap@compromised-supplier.example>
+Reply-To: ap.helpdesk@gmail.com
+Subject: Updated invoice attached - payment due today
+To: recipient@example.com
+Date: Thu, 04 Jun 2026 10:33:00 -0700
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="BOUNDARY-SYNTHETIC-INVOICE"
+
+--BOUNDARY-SYNTHETIC-INVOICE
+Content-Type: text/plain; charset="UTF-8"
+
+Please confirm payment for the attached invoice today. The banking details were updated.
+
+--BOUNDARY-SYNTHETIC-INVOICE
+Content-Type: application/octet-stream; name="invoice.pdf.exe"
+Content-Disposition: attachment; filename="invoice.pdf.exe"
+Content-Transfer-Encoding: base64
+
+VGhpcyBpcyBhIGhhcm1sZXNzIHN5bnRoZXRpYyB0ZXN0IGF0dGFjaG1lbnQuCg==
+--BOUNDARY-SYNTHETIC-INVOICE--

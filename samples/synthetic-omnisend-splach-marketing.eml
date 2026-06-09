@@ -1,0 +1,71 @@
+Delivered-To: recipient@example.com
+Received: by 2002:a05:7412:c90:b0:1da:2a36:2529 with SMTP id e16csp2012413rdg;
+        Mon, 1 Jun 2026 08:16:00 -0700 (PDT)
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@dkim4.omnisend.email header.s=omni2 header.b=redacted;
+       dkim=pass header.i=@c.lb.soundest.email header.s=pic header.b=redacted;
+       dkim=pass header.i=@mailgun.org header.s=mg header.b=redacted;
+       spf=pass (google.com: domain of bounce+redacted=example.com@c.lb.soundest.email designates 69.72.35.239 as permitted sender) smtp.mailfrom="bounce+redacted=example.com@c.lb.soundest.email";
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=soundest.email
+Return-Path: <bounce+redacted=example.com@c.lb.soundest.email>
+Received: from v5239.v561b35cb.usw1.send.mailgun.net (v5239.v561b35cb.usw1.send.mailgun.net. [69.72.35.239])
+        by mx.google.com with UTF8SMTPS id synthetic
+        for <recipient@example.com>;
+        Mon, 01 Jun 2026 08:16:00 -0700 (PDT)
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@dkim4.omnisend.email header.s=omni2 header.b=redacted;
+       dkim=pass header.i=@c.lb.soundest.email header.s=pic header.b=redacted;
+       dkim=pass header.i=@mailgun.org header.s=mg header.b=redacted;
+       spf=pass (google.com: domain of bounce+redacted=example.com@c.lb.soundest.email designates 69.72.35.239 as permitted sender) smtp.mailfrom="bounce+redacted=example.com@c.lb.soundest.email";
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=soundest.email
+DKIM-Signature: d=dkim4.omnisend.email; s=omni2; bh=redacted; b=redacted
+DKIM-Signature: d=c.lb.soundest.email; s=pic; bh=redacted; b=redacted
+DKIM-Signature: d=mailgun.org; s=mg; bh=redacted; b=redacted
+X-Mailgun-Sid: redacted
+X-Feedback-Id: postmaster@c.lb.soundest.email::brand:mailgun
+Received: by redacted with HTTP id redacted; Mon, 01 Jun 2026 15:15:56 GMT
+X-Mailgun-Sending-Ip: 69.72.35.239
+Sender: communications=brand.soundest.email@c.lb.soundest.email
+Date: Mon, 01 Jun 2026 15:15:56 +0000
+Mime-Version: 1.0
+Content-Type: multipart/alternative; boundary="BOUNDARY-SPLACH"
+Subject: No More Cables. No More Dead Battery.Meet SPLACH Zippy Ultra.
+From: SPLACH <communications@brand.soundest.email>
+To: recipient@example.com
+X-Mailgun-Secondary-Dkim: dkim4.omnisend.email,omni2
+X-Mailgun-Track: false
+Feedback-Id: campaign:omnisend
+Reply-To: SPLACH <sales@backerbooster.example>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+O:secondary-Dkim: dkim4.omnisend.email,omni2
+List-Unsubscribe: <https://jey.soundestlink.example/contactsPreferences/v2/unsubscribe/?b=brand&c=contact&payload=token&headerUnsub=true>
+Message-Id: <20260601151556.synthetic@c.lb.soundest.email>
+
+--BOUNDARY-SPLACH
+Content-Type: text/plain; charset="utf-8"
+
+One Tap, All-Day Power.
+
+This email was sent to you as HTML-only. To view it, please visit:
+https://jey.soundestlink.example/ce/v/contact/campaign
+
+Unsubscribe
+https://jey.soundestlink.example/contactsPreferences/v2/unsubscribe/?b=brand&c=contact&payload=token
+
+Visit site
+backerbooster.example
+
+--BOUNDARY-SPLACH
+Content-Type: text/html; charset="utf-8"
+
+<html><head><title>No More Cables. No More Dead Battery.Meet SPLACH Zippy Ultra.</title></head>
+<body>
+<p>One Tap, All-Day Power.</p>
+<a href="https://swv.soundestlink.example/ce/c/contact/campaign/link1?signature=token"><img src="https://jey.soundestlink.example/image/newsletter/header" alt=""></a>
+<p>SPLACH Zippy Ultra: Wireless Mount + Detachable Power Bank</p>
+<a href="https://swv.soundestlink.example/ce/c/contact/campaign/link2?signature=token">Shop now</a>
+<a href="https://jey.soundestlink.example/contactsPreferences/v2/?b=brand&c=contact&payload=token">Edit preferences</a>
+<a href="https://jey.soundestlink.example/contactsPreferences/v2/unsubscribe/?b=brand&c=contact&payload=token">Unsubscribe</a>
+</body></html>
+
+--BOUNDARY-SPLACH--

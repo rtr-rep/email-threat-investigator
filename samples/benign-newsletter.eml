@@ -1,0 +1,16 @@
+Return-Path: <newsletter@updates.example.org>
+Received: from mail.updates.example.org (mail.updates.example.org [203.0.113.50]) by mx.recipient.example with ESMTP id good123; Wed, 3 Jun 2026 09:00:00 +0200
+Authentication-Results: mx.recipient.example; spf=pass smtp.mailfrom=updates.example.org; dkim=pass header.d=updates.example.org; dmarc=pass header.from=updates.example.org
+From: "Example Updates" <newsletter@updates.example.org>
+To: Philip Ritter <philip@example.test>
+Reply-To: newsletter@updates.example.org
+Subject: Monthly security newsletter
+Message-ID: <newsletter-20260603@updates.example.org>
+Date: Wed, 3 Jun 2026 09:00:00 +0200
+
+Hello,
+
+Here is this month's security awareness newsletter with general tips about passwords and MFA.
+
+Regards,
+Example Updates

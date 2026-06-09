@@ -1,0 +1,16 @@
+Return-Path: <support@vendor.example>
+Received: from mail.vendor.example (mail.vendor.example [203.0.113.60]) by mx.recipient.example with ESMTP id vendor123; Wed, 3 Jun 2026 11:00:00 +0200
+Authentication-Results: mx.recipient.example; spf=pass smtp.mailfrom=vendor.example; dkim=pass header.d=vendor.example; dmarc=pass header.from=vendor.example
+From: "Vendor Support" <support@vendor.example>
+To: Philip Ritter <philip@example.test>
+Reply-To: support@vendor.example
+Subject: Your support ticket update
+Message-ID: <ticket-12345@vendor.example>
+Date: Wed, 3 Jun 2026 11:00:00 +0200
+
+Hello Philip,
+
+Your support ticket has been updated. You can review the ticket in your vendor portal.
+
+Regards,
+Vendor Support

@@ -1,0 +1,22 @@
+Delivered-To: analyst@example.com
+Received: from mta2.email.vendor.example (mta2.email.vendor.example. [198.51.100.54])
+        by mx.google.com with ESMTPS id synthetic
+        for <analyst@example.com>;
+        Thu, 04 Jun 2026 13:00:00 -0700 (PDT)
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@brand.example;
+       spf=pass smtp.mailfrom=bounce.email.brand.example;
+       dmarc=pass header.from=brand.example
+Return-Path: <bounce.email.brand.example>
+From: "Brand Updates" <news@brand.example>
+To: analyst@example.com
+Subject: Your monthly account offers
+Message-ID: <synthetic-sfmc@brand.example>
+MIME-Version: 1.0
+X-SFMC-Stack: 11
+Feedback-ID: 12345:brand:sfmc
+x-job: 987654_12345
+List-Unsubscribe: <https://cloud.email.brand.example/unsubscribe?id=synthetic>
+Content-Type: text/html; charset="UTF-8"
+
+<html><body><p>Your monthly account offers are ready.</p><a href="https://cloud.email.brand.example/view">View offers</a></body></html>

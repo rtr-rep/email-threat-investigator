@@ -1,0 +1,27 @@
+Return-Path: <bounce@evil-example.test>
+Received: from mx.recipient.example (mx.recipient.example [203.0.113.10]) by mailbox.recipient.example with ESMTP id final123; Wed, 3 Jun 2026 10:18:00 +0200
+Received: from unknown-vps-host.test (unknown-vps-host.test [198.51.100.23]) by mx.recipient.example with ESMTP id relay456; Wed, 3 Jun 2026 10:17:55 +0200
+Authentication-Results: mx.recipient.example; spf=fail smtp.mailfrom=evil-example.test; dkim=fail header.d=microsoft.com; dmarc=fail header.from=microsoft.com
+From: "Microsoft Security" <security@microsoft.com>
+To: Philip Ritter <philip@example.test>
+Reply-To: microsoft-helpdesk-verify@gmail.com
+Subject: Urgent password verification required
+Message-ID: <20260603.999999@evil-example.test>
+Date: Wed, 3 Jun 2026 10:15:00 +0200
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="BOUNDARY"
+
+--BOUNDARY
+Content-Type: text/html; charset="utf-8"
+
+<html><body>
+<p>Please verify your password immediately to avoid account suspension.</p>
+<p><a href="http://198.51.100.77/login">https://microsoft.com/security</a></p>
+<p>Please reply urgently if you cannot access the portal.</p>
+</body></html>
+--BOUNDARY
+Content-Type: application/octet-stream
+Content-Disposition: attachment; filename="invoice.pdf.exe"
+
+FAKE-DEMO-CONTENT-NOT-MALWARE
+--BOUNDARY--
