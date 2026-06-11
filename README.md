@@ -43,6 +43,26 @@ The project is designed as a cybersecurity portfolio showcase: explainable, evid
 - Provides both CLI and Streamlit web UI.
 - Includes safe synthetic sample emails for demos and regression tests.
 
+## Screenshots
+
+The screenshots below use committed synthetic sample emails only. They do not show private inbox data or real user emails.
+
+### Upload screen
+
+![PhishTriage upload screen](docs/assets/screenshots/phishtriage-upload-screen.png)
+
+### Low-risk result with positive authentication evidence
+
+![PhishTriage low-risk result](docs/assets/screenshots/phishtriage-low-risk-result.png)
+
+### Dangerous result with plain-English risk findings
+
+![PhishTriage dangerous result](docs/assets/screenshots/phishtriage-dangerous-result.png)
+
+### URL evidence and defanged destination review
+
+![PhishTriage URL evidence](docs/assets/screenshots/phishtriage-url-evidence.png)
+
 ## Safety model
 
 PhishTriage is intentionally static and local.
