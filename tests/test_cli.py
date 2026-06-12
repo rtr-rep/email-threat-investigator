@@ -30,6 +30,9 @@ def test_cli_print_result_separates_positive_evidence_from_suspicious_findings(c
 
     output = capsys.readouterr().out
     assert "Positive evidence:" in output
+    assert "[!] SUSPICIOUS — Risk score 25/100" in output
+    assert "Top risks:" in output
+    assert "Sender / reply path" in output
     assert "SPF passed" in output
     suspicious_section = output.split("Why this is suspicious:", 1)[1].split("Recommended action:", 1)[0]
     assert "Reply-To differs" in suspicious_section

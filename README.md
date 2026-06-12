@@ -112,17 +112,33 @@ Then open the local Streamlit URL and upload a `.eml` file.
 ## Example CLI output
 
 ```text
-Verdict: High Risk
-Score: 70/100
+PhishTriage Analysis
+File: synthetic-paypal-raw-ip-payment-phish.eml
+
+[!] DANGEROUS — Risk score 100/100
+
+Top risks:
+1. Replies go to `paypal-resolution-center@gmail.com`, but the visible sender uses
+   `billing@unrelated-billing.example`. The reply destination is a different domain.
+2. Free-mail Reply-To detected: replies go to `gmail.com` even though the email appears to come from
+   `unrelated-billing.example`.
+3. Urgent reply/payment language detected in the email body.
+4. Display name or subject references `paypal`, but the sender domain `unrelated-billing.example` is
+   not obviously related to that brand.
 
 Positive evidence:
-- No explicit positive evidence extracted yet.
+- None found.
 
 Why this is suspicious:
-- [sender] From address appears randomly generated: `WgKkvjPM@8iE3TfaL8iE3TfaL.fr`. Random-looking sender local-parts or domains are common in spam/phishing campaigns.
-- [sender] Return-Path uses an unusually long/generated domain with excessive length/depth, IP-like fragments, random-looking labels.
-- [sender] Return-Path domain does not align with visible From domain, and no passing authentication or trusted ESP/forwarding context explains the difference.
-- [route] The first visible sending server is not obviously related to the claimed sender domain.
+
+Sender / reply path
+- Replies go to `paypal-resolution-center@gmail.com`, but the visible sender uses
+  `billing@unrelated-billing.example`. The reply destination is a different domain.
+
+Authentication
+- SPF failed: the sending server was not authorized for the envelope sender domain.
+- DKIM failed: the message signature could not be validated.
+- DMARC failed: the visible From domain did not pass domain-alignment checks.
 
 Recommended action:
 - Do not reply
