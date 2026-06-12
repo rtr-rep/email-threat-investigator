@@ -1,14 +1,11 @@
 from __future__ import annotations
 
+from phishtriage.email_utils import has_forwarding_indicators
 from phishtriage.models import Finding, ParsedEmail
 
 
 def _has_any_result(text: str, mechanism: str) -> bool:
     return f"{mechanism}=" in text or f"{mechanism} " in text
-
-
-def _has_forwarding_indicators(email: ParsedEmail) -> bool:
-    return bool(email.forwarded_headers or len(email.delivered_to) > 1 or email.arc_authentication_results)
 
 
 def _all_major_auth_passed(text: str) -> bool:
@@ -20,7 +17,7 @@ def analyze_authentication(email: ParsedEmail) -> list[Finding]:
     arc_text = "\n".join(email.arc_authentication_results).lower()
     findings: list[Finding] = []
 
-    if _has_forwarding_indicators(email):
+    if has_forwarding_indicators(email):
         message = "Forwarding indicators detected"
         if email.arc_authentication_results:
             message += "; ARC-Authentication-Results preserves upstream authentication context"

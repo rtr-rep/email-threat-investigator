@@ -5,6 +5,7 @@ import re
 from html.parser import HTMLParser
 from urllib.parse import urlparse
 
+from phishtriage.email_utils import domain_from_email, full_authentication_passed
 from phishtriage.infrastructure_analyzer import analyze_infrastructure
 from phishtriage.models import ExtractedUrl, Finding, ParsedEmail
 
@@ -153,10 +154,6 @@ def _host(url: str) -> str:
     return (urlparse(url).hostname or "").lower()
 
 
-def _domain_from_email(address: str) -> str:
-    return address.rsplit("@", 1)[-1].lower() if "@" in address else ""
-
-
 def _domains_align(host: str, sender_domain: str) -> bool:
     if not host or not sender_domain:
         return False
@@ -176,13 +173,13 @@ def _is_ip(host: str) -> bool:
     return True
 
 
-def _auth_passed(email: ParsedEmail) -> bool:
-    text = "\n".join(email.authentication_results + email.arc_authentication_results).lower()
-    return "spf=pass" in text and "dkim=pass" in text and "dmarc=pass" in text
-
-
 def _is_known_esp_tracking_host(email: ParsedEmail, host: str) -> bool:
-    return bool(host and _auth_passed(email) and analyze_infrastructure(email) and any(part in host for part in ESP_TRACKING_HOST_PARTS))
+    return bool(
+        host
+        and full_authentication_passed(email)
+        and analyze_infrastructure(email)
+        and any(part in host for part in ESP_TRACKING_HOST_PARTS)
+    )
 
 
 def categorize_url(email: ParsedEmail, url: ExtractedUrl) -> str:
@@ -212,7 +209,7 @@ def categorize_url(email: ParsedEmail, url: ExtractedUrl) -> str:
 
 def analyze_urls(email: ParsedEmail) -> list[Finding]:
     findings: list[Finding] = []
-    sender_domain = _domain_from_email(email.from_address)
+    sender_domain = domain_from_email(email.from_address)
     flagged_cloud_hosts: set[str] = set()
 
     for url in extract_urls(email):

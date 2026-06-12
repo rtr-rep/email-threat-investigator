@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 
+from phishtriage.email_utils import domain_from_email, sender_identity_authentication_passed
 from phishtriage.infrastructure_analyzer import analyze_infrastructure
 from phishtriage.models import Finding, ParsedEmail, RouteHop
 
@@ -9,10 +10,6 @@ RECEIVED_RE = re.compile(
     r"from\s+(?P<from_host>[^\s(]+)(?:\s+\([^\[]*\[(?P<ip>[^\]]+)\]\))?\s+by\s+(?P<by_host>[^\s]+).*?(?:;\s*(?P<timestamp>.+))?$",
     re.IGNORECASE | re.DOTALL,
 )
-
-
-def _domain(address: str) -> str:
-    return address.rsplit("@", 1)[1].lower() if "@" in address else ""
 
 
 def _domain_labels(value: str) -> list[str]:
@@ -30,11 +27,6 @@ def _looks_related_to_sender(host: str, from_domain: str) -> bool:
     if len(labels) >= 2 and labels[-2] in host:
         return True
     return False
-
-
-def _auth_passed(email: ParsedEmail) -> bool:
-    text = "\n".join(email.authentication_results + email.arc_authentication_results).lower()
-    return "spf=pass" in text and ("dkim=pass" in text or "dmarc=pass" in text)
 
 
 def _has_known_esp_context(email: ParsedEmail) -> bool:
@@ -64,7 +56,7 @@ def build_hop_timeline(email: ParsedEmail) -> list[RouteHop]:
 def analyze_route(email: ParsedEmail) -> list[Finding]:
     findings: list[Finding] = []
     hops = build_hop_timeline(email)
-    from_domain = _domain(email.from_address)
+    from_domain = domain_from_email(email.from_address)
 
     if not hops:
         findings.append(Finding("route", "medium", "No parseable Received headers were found, so the email route could not be reconstructed.", 10))
@@ -74,7 +66,7 @@ def analyze_route(email: ParsedEmail) -> list[Finding]:
     if from_domain and first.from_host and not _looks_related_to_sender(first.from_host, from_domain):
         # Known ESPs often send from platform-owned hosts that differ from the visible brand domain.
         # If authentication passed, keep that as context instead of scoring a route mismatch.
-        if _auth_passed(email) and _has_known_esp_context(email):
+        if sender_identity_authentication_passed(email) and _has_known_esp_context(email):
             return findings
         findings.append(
             Finding(

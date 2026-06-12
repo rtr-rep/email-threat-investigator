@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 
+from phishtriage.email_utils import domain_from_email
 from phishtriage.models import Finding, ParsedEmail
 
 # Small, explainable allow-list for high-abuse brand display names. This is
@@ -26,10 +27,6 @@ BRAND_DOMAIN_HINTS: dict[str, tuple[str, ...]] = {
 _TITLE_TAG_RE = re.compile(r"<\s*title\b", re.IGNORECASE)
 
 
-def _domain(address: str) -> str:
-    return address.rsplit("@", 1)[1].lower() if "@" in address else ""
-
-
 def _display_text(email: ParsedEmail) -> str:
     return f"{email.from_display_name} {email.subject}".lower()
 
@@ -50,7 +47,7 @@ def _has_title_after_body_or_html_close(html: str) -> bool:
 
 def analyze_content(email: ParsedEmail) -> list[Finding]:
     findings: list[Finding] = []
-    sender_domain = _domain(email.from_address)
+    sender_domain = domain_from_email(email.from_address)
     display_text = _display_text(email)
 
     for brand, hints in BRAND_DOMAIN_HINTS.items():

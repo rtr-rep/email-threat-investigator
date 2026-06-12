@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from phishtriage.email_utils import domain_from_email, full_authentication_passed
 from phishtriage.infrastructure_analyzer import analyze_infrastructure
 from phishtriage.models import Finding, ParsedEmail
 
@@ -23,29 +24,23 @@ REPLY_URGENCY_PHRASES = (
 )
 
 
-def _domain(address: str) -> str:
-    if "@" not in address:
-        return ""
-    return address.rsplit("@", 1)[1].lower()
-
-
-def _auth_passed(email: ParsedEmail) -> bool:
-    text = "\n".join(email.authentication_results + email.arc_authentication_results).lower()
-    return "spf=pass" in text and "dkim=pass" in text and "dmarc=pass" in text
-
-
 def _has_known_esp_context(email: ParsedEmail) -> bool:
     return bool(analyze_infrastructure(email))
 
 
 def _is_esp_marketing_reply_context(email: ParsedEmail, reply_domain: str) -> bool:
-    return bool(reply_domain and reply_domain not in FREE_MAIL_DOMAINS and _auth_passed(email) and _has_known_esp_context(email))
+    return bool(
+        reply_domain
+        and reply_domain not in FREE_MAIL_DOMAINS
+        and full_authentication_passed(email)
+        and _has_known_esp_context(email)
+    )
 
 
 def analyze_reply_path(email: ParsedEmail) -> list[Finding]:
     findings: list[Finding] = []
-    from_domain = _domain(email.from_address)
-    reply_domain = _domain(email.reply_to)
+    from_domain = domain_from_email(email.from_address)
+    reply_domain = domain_from_email(email.reply_to)
 
     if email.reply_to and from_domain and reply_domain and from_domain != reply_domain:
         if _is_esp_marketing_reply_context(email, reply_domain):

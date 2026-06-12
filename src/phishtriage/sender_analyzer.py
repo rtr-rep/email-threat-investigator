@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 from email.utils import parseaddr
 
+from phishtriage.email_utils import has_forwarding_indicators, parsed_address_domain, sender_identity_authentication_passed
 from phishtriage.infrastructure_analyzer import analyze_infrastructure
 from phishtriage.models import Finding, ParsedEmail
 from phishtriage.reply_analyzer import FREE_MAIL_DOMAINS
@@ -31,12 +32,7 @@ _KNOWN_LOCAL_PARTS = {
 
 
 def _address_domain(address: str) -> str:
-    _, parsed = parseaddr(address or "")
-    value = parsed or address or ""
-    value = value.strip().removeprefix("<").removesuffix(">").strip()
-    if "@" not in value:
-        return ""
-    return value.rsplit("@", 1)[1].lower().rstrip(".")
+    return parsed_address_domain(address)
 
 
 def _address_local(address: str) -> str:
@@ -61,15 +57,6 @@ def _domains_align(first: str, second: str) -> bool:
     first = first.lower()
     second = second.lower()
     return first == second or first.endswith(f".{second}") or second.endswith(f".{first}") or _base_domain(first) == _base_domain(second)
-
-
-def _auth_passed(email: ParsedEmail) -> bool:
-    text = "\n".join(email.authentication_results + email.arc_authentication_results).lower()
-    return "spf=pass" in text and ("dkim=pass" in text or "dmarc=pass" in text)
-
-
-def _has_forwarding_context(email: ParsedEmail) -> bool:
-    return bool(email.forwarded_headers or len(email.delivered_to) > 1 or email.arc_authentication_results)
 
 
 def _has_known_esp_context(email: ParsedEmail) -> bool:
@@ -133,8 +120,8 @@ def analyze_sender_identity(email: ParsedEmail) -> list[Finding]:
     from_domain = _address_domain(email.from_address)
     return_domain = _address_domain(email.return_path)
     esp_context = _has_known_esp_context(email)
-    forwarding_context = _has_forwarding_context(email)
-    auth_passed = _auth_passed(email)
+    forwarding_context = has_forwarding_indicators(email)
+    auth_passed = sender_identity_authentication_passed(email)
 
     if _looks_random_from_address(email):
         findings.append(
