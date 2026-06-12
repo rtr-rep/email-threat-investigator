@@ -88,6 +88,28 @@ def test_url_analyzer_flags_valid_html_large_clickable_body_wrapper():
     assert "storage.googleapis.com" in messages
 
 
+def test_extract_urls_deduplicates_repeated_plain_text_urls():
+    parsed = ParsedEmail(
+        from_address="alerts@example.test",
+        from_display_name="Alerts",
+        reply_to="alerts@example.test",
+        return_path="alerts@example.test",
+        subject="Links",
+        message_id="<links@example.test>",
+        body_text=(
+            "Review https://example.test/login then review https://example.test/login again. "
+            "Backup link: https://example.test/support"
+        ),
+        received_headers=[],
+        authentication_results=[],
+        attachments=[],
+    )
+
+    urls = extract_urls(parsed)
+
+    assert [url.href for url in urls] == ["https://example.test/login", "https://example.test/support"]
+
+
 def test_url_analyzer_does_not_score_plain_marketing_url_mismatches():
     parsed = ParsedEmail(
         from_address="noreply@steampowered.com",

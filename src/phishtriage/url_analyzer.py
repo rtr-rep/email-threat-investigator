@@ -123,13 +123,20 @@ class _LargeClickableAreaParser(HTMLParser):
 
 def extract_urls(email: ParsedEmail) -> list[ExtractedUrl]:
     urls: list[ExtractedUrl] = []
+    seen_values: set[str] = set()
     if email.body_html:
         parser = _LinkParser()
         parser.feed(email.body_html)
         urls.extend(parser.links)
+        for url in parser.links:
+            seen_values.add(url.href)
+            if url.visible_text:
+                seen_values.add(url.visible_text)
     for match in URL_RE.findall(email.body_text):
-        if not any(existing.href == match or existing.visible_text == match for existing in urls):
-            urls.append(ExtractedUrl(href=match, visible_text=match))
+        if match in seen_values:
+            continue
+        urls.append(ExtractedUrl(href=match, visible_text=match))
+        seen_values.add(match)
     return urls
 
 
