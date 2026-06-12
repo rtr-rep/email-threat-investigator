@@ -54,6 +54,40 @@ def test_url_analyzer_flags_large_clickable_body_wrapper():
     assert "storage.googleapis.com" in messages
 
 
+def test_url_analyzer_flags_valid_html_large_clickable_body_wrapper():
+    parsed = ParsedEmail(
+        from_address="billing@example-alerts.test",
+        from_display_name="Billing Notice",
+        reply_to="billing@example-alerts.test",
+        return_path="bounce@example-alerts.test",
+        subject="Review your invoice",
+        message_id="<wrapper@example-alerts.test>",
+        body_text="Review your invoice and payment status immediately before access is suspended.",
+        body_html="""
+        <html>
+          <body>
+            <a href="https://storage.googleapis.com/example-alerts/invoice.html">
+              <div>
+                <h1>Review your invoice</h1>
+                <p>Your payment method needs attention. Review your invoice and payment status immediately.</p>
+                <p>Failure to respond may interrupt access to your account and billing portal.</p>
+              </div>
+            </a>
+          </body>
+        </html>
+        """,
+        received_headers=[],
+        authentication_results=[],
+        attachments=[],
+    )
+
+    findings = analyze_urls(parsed)
+
+    messages = "\n".join(f.message for f in findings).lower()
+    assert "large clickable" in messages
+    assert "storage.googleapis.com" in messages
+
+
 def test_url_analyzer_does_not_score_plain_marketing_url_mismatches():
     parsed = ParsedEmail(
         from_address="noreply@steampowered.com",

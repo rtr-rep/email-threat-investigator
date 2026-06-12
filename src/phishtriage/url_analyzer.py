@@ -77,24 +77,47 @@ class _LargeClickableAreaParser(HTMLParser):
     def __init__(self) -> None:
         super().__init__()
         self.urls: list[str] = []
-        self._active_href = ""
-        self._anchor_depth = 0
+        self._href_stack: list[str] = []
+        self._body_seen = False
+        self._in_body = False
+        self._body_visible_chars = 0
+        self._anchor_visible_chars: dict[str, int] = {}
 
     def handle_starttag(self, tag: str, attrs) -> None:
         tag = tag.lower()
-        if tag == "a":
-            if self._anchor_depth == 0:
-                attrs_dict = dict(attrs)
-                self._active_href = attrs_dict.get("href", "")
-            self._anchor_depth += 1
-        elif tag == "body" and self._active_href:
-            self.urls.append(self._active_href)
+        if tag == "body":
+            self._body_seen = True
+            self._in_body = True
+        elif tag == "a":
+            attrs_dict = dict(attrs)
+            self._href_stack.append(str(attrs_dict.get("href") or ""))
+
+    def handle_data(self, data: str) -> None:
+        if self._body_seen and not self._in_body:
+            return
+        visible_text = " ".join(data.split())
+        if not visible_text:
+            return
+        text_length = len(visible_text)
+        self._body_visible_chars += text_length
+        for href in self._href_stack:
+            if href:
+                self._anchor_visible_chars[href] = self._anchor_visible_chars.get(href, 0) + text_length
 
     def handle_endtag(self, tag: str) -> None:
-        if tag.lower() == "a" and self._anchor_depth:
-            self._anchor_depth -= 1
-            if self._anchor_depth == 0:
-                self._active_href = ""
+        tag = tag.lower()
+        if tag == "body":
+            self._in_body = False
+        elif tag == "a" and self._href_stack:
+            self._href_stack.pop()
+
+    def close(self) -> None:
+        super().close()
+        if self._body_visible_chars < 80:
+            return
+        for href, anchor_chars in self._anchor_visible_chars.items():
+            if anchor_chars / self._body_visible_chars >= 0.6:
+                self.urls.append(href)
 
 
 def extract_urls(email: ParsedEmail) -> list[ExtractedUrl]:
@@ -122,6 +145,7 @@ def _large_clickable_body_urls(email: ParsedEmail) -> list[str]:
         return []
     parser = _LargeClickableAreaParser()
     parser.feed(email.body_html)
+    parser.close()
     return parser.urls
 
 
