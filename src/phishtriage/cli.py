@@ -1,17 +1,16 @@
 from __future__ import annotations
 
 from pathlib import Path
-from textwrap import wrap
 
 from phishtriage.attachment_analyzer import analyze_attachments
 from phishtriage.auth_analyzer import analyze_authentication
 from phishtriage.content_analyzer import analyze_content
 from phishtriage.infrastructure_analyzer import analyze_infrastructure
-from phishtriage.models import AnalysisResult
+from phishtriage.models import AnalysisResult, ParsedEmail, RouteHop
 from phishtriage.parser import parse_email
 from phishtriage.reply_analyzer import analyze_reply_path
 from phishtriage.report import render_markdown_report
-from phishtriage.route_analyzer import analyze_route
+from phishtriage.route_analyzer import analyze_route, build_hop_timeline
 from phishtriage.scoring import score_findings
 from phishtriage.sender_analyzer import analyze_sender_identity
 from phishtriage.url_analyzer import analyze_urls
@@ -31,76 +30,50 @@ def analyze_email(path: Path | str) -> AnalysisResult:
     return score_findings(findings)
 
 
-CATEGORY_HEADINGS = {
-    "reply": "Sender / reply path",
-    "sender": "Sender / reply path",
-    "auth": "Authentication",
-    "content": "Content",
-    "url": "URLs",
-    "attachment": "Attachments",
-    "route": "Route evidence",
-    "infrastructure": "Infrastructure context",
-}
+def _format_hop(hop: RouteHop) -> str:
+    from_host = hop.from_host
+    if hop.ip_address:
+        from_host = f"{from_host} [{hop.ip_address}]"
+    return f"{from_host} -> {hop.by_host}"
 
 
-def _print_wrapped_bullet(text: str, *, indent: str = "  ", width: int = 100) -> None:
-    lines = wrap(text, width=width, break_long_words=False, break_on_hyphens=False)
-    if not lines:
-        print("-")
+def _print_email_server_path(parsed: ParsedEmail) -> None:
+    print("\nEmail server path:")
+    hops = build_hop_timeline(parsed)
+    if not hops:
+        print("- No parseable Received headers were found, so the email route could not be reconstructed.")
         return
-    print(f"- {lines[0]}")
-    for line in lines[1:]:
-        print(f"{indent}{line}")
+    for hop in hops:
+        print(f"- {_format_hop(hop)}")
+    print("- Note: Route is based only on visible Received headers; some hops may be missing.")
 
 
-def _print_numbered_item(index: int, text: str, *, width: int = 100) -> None:
-    prefix = f"{index}. "
-    lines = wrap(text, width=width - len(prefix), break_long_words=False, break_on_hyphens=False)
-    if not lines:
-        print(prefix.rstrip())
-        return
-    print(f"{prefix}{lines[0]}")
-    for line in lines[1:]:
-        print(f"{' ' * len(prefix)}{line}")
+def _print_result(result: AnalysisResult, parsed: ParsedEmail | None = None) -> None:
+    print(f"Verdict: {result.verdict}")
+    print(f"Score: {result.score}/100")
 
-
-def _print_result(result: AnalysisResult, eml_path: Path | str | None = None) -> None:
-    print("PhishTriage Analysis")
-    if eml_path is not None:
-        print(f"File: {Path(eml_path).name}")
-    print(f"\n[!] {result.verdict.upper()} — Risk score {result.score}/100")
+    if parsed is not None:
+        _print_email_server_path(parsed)
 
     positive_evidence = [finding for finding in result.findings if finding.points == 0]
     risk_findings = [finding for finding in result.findings if finding.points > 0]
 
-    if risk_findings:
-        print("\nTop risks:")
-        for index, finding in enumerate(risk_findings[:4], start=1):
-            _print_numbered_item(index, finding.message)
-
     print("\nPositive evidence:")
     if positive_evidence:
         for finding in positive_evidence:
-            _print_wrapped_bullet(finding.message)
+            print(f"- [{finding.category}] {finding.message}")
     else:
-        print("- None found.")
+        print("- No explicit positive evidence extracted yet.")
 
     print("\nWhy this is suspicious:")
     if risk_findings:
-        grouped_findings: dict[str, list] = {}
         for finding in risk_findings:
-            heading = CATEGORY_HEADINGS.get(finding.category, finding.category.title())
-            grouped_findings.setdefault(heading, []).append(finding)
-
-        for heading, findings in grouped_findings.items():
-            print(f"\n{heading}")
-            for finding in findings:
-                _print_wrapped_bullet(finding.message)
+            print(f"- [{finding.category}] {finding.message}")
     else:
         print("- No suspicious findings detected by the current checks.")
     print("\nRecommended action:")
     for action in result.recommended_actions:
-        _print_wrapped_bullet(action)
+        print(f"- {action}")
 
 
 def main() -> None:
@@ -116,7 +89,7 @@ def main() -> None:
     if args.command == "analyze":
         parsed = parse_email(args.eml_path)
         result = analyze_email(args.eml_path)
-        _print_result(result, args.eml_path)
+        _print_result(result, parsed)
         if args.out:
             output_path = Path(args.out)
             output_path.parent.mkdir(parents=True, exist_ok=True)

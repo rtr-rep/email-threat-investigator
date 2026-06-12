@@ -112,33 +112,26 @@ Then open the local Streamlit URL and upload a `.eml` file.
 ## Example CLI output
 
 ```text
-PhishTriage Analysis
-File: synthetic-paypal-raw-ip-payment-phish.eml
+Verdict: Dangerous
+Score: 100/100
 
-[!] DANGEROUS — Risk score 100/100
-
-Top risks:
-1. Replies go to `paypal-resolution-center@gmail.com`, but the visible sender uses
-   `billing@unrelated-billing.example`. The reply destination is a different domain.
-2. Free-mail Reply-To detected: replies go to `gmail.com` even though the email appears to come from
-   `unrelated-billing.example`.
-3. Urgent reply/payment language detected in the email body.
-4. Display name or subject references `paypal`, but the sender domain `unrelated-billing.example` is
-   not obviously related to that brand.
+Email server path:
+- mail.unrelated-billing.example [203.0.113.44] -> mx.google.com
+- Note: Route is based only on visible Received headers; some hops may be missing.
 
 Positive evidence:
-- None found.
+- No explicit positive evidence extracted yet.
 
 Why this is suspicious:
-
-Sender / reply path
-- Replies go to `paypal-resolution-center@gmail.com`, but the visible sender uses
-  `billing@unrelated-billing.example`. The reply destination is a different domain.
-
-Authentication
-- SPF failed: the sending server was not authorized for the envelope sender domain.
-- DKIM failed: the message signature could not be validated.
-- DMARC failed: the visible From domain did not pass domain-alignment checks.
+- [reply] Replies go to `paypal-resolution-center@gmail.com`, but the visible sender uses `billing@unrelated-billing.example`. The reply destination is a different domain.
+- [reply] Free-mail Reply-To detected: replies go to `gmail.com` even though the email appears to come from `unrelated-billing.example`.
+- [content] Urgent reply/payment language detected in the email body.
+- [content] Display name or subject references `paypal`, but the sender domain `unrelated-billing.example` is not obviously related to that brand.
+- [auth] SPF failed: the sending server was not authorized for the envelope sender domain.
+- [auth] DKIM failed: the message signature could not be validated.
+- [auth] DMARC failed: the visible From domain did not pass domain-alignment checks.
+- [url] Visible link text shows `https://paypal.com/signin`, but the actual destination is `http://198.51.100.77/paypal/login`.
+- [url] Link destination uses a raw IP address: `http://198.51.100.77/paypal/login`.
 
 Recommended action:
 - Do not reply
