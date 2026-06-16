@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from phishtriage.email_utils import domain_from_email, full_authentication_passed
+from phishtriage.email_utils import domain_from_email, visible_sender_authenticated
 from phishtriage.infrastructure_analyzer import analyze_infrastructure
 from phishtriage.models import Finding, ParsedEmail
 
@@ -32,7 +32,7 @@ def _is_esp_marketing_reply_context(email: ParsedEmail, reply_domain: str) -> bo
     return bool(
         reply_domain
         and reply_domain not in FREE_MAIL_DOMAINS
-        and full_authentication_passed(email)
+        and visible_sender_authenticated(email)
         and _has_known_esp_context(email)
     )
 

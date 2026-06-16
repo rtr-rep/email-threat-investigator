@@ -5,7 +5,7 @@ import re
 from html.parser import HTMLParser
 from urllib.parse import urlparse
 
-from phishtriage.email_utils import domain_from_email, full_authentication_passed
+from phishtriage.email_utils import domain_from_email, visible_sender_authenticated
 from phishtriage.infrastructure_analyzer import analyze_infrastructure
 from phishtriage.models import ExtractedUrl, Finding, ParsedEmail
 
@@ -183,7 +183,7 @@ def _is_ip(host: str) -> bool:
 def _is_known_esp_tracking_host(email: ParsedEmail, host: str) -> bool:
     return bool(
         host
-        and full_authentication_passed(email)
+        and visible_sender_authenticated(email)
         and analyze_infrastructure(email)
         and any(part in host for part in ESP_TRACKING_HOST_PARTS)
     )

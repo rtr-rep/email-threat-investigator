@@ -9,14 +9,21 @@ def authentication_text(email: ParsedEmail) -> str:
     return "\n".join(email.authentication_results + email.arc_authentication_results).lower()
 
 
-def full_authentication_passed(email: ParsedEmail) -> bool:
-    text = authentication_text(email)
-    return "spf=pass" in text and "dkim=pass" in text and "dmarc=pass" in text
+def visible_sender_authenticated(email: ParsedEmail) -> bool:
+    """Whether the visible sender identity is authenticated well enough to suppress warnings.
 
+    Policy: DMARC must pass AND at least one of SPF or DKIM must pass.
 
-def sender_identity_authentication_passed(email: ParsedEmail) -> bool:
+    DMARC is mandatory because it is the alignment signal for the visible From
+    domain; SPF or DKIM alone is not enough to trust the displayed sender. A
+    missing or failing DMARC deliberately keeps warnings visible, since that is
+    exactly the pattern this triage tool exists to surface.
+    """
     text = authentication_text(email)
-    return "spf=pass" in text and ("dkim=pass" in text or "dmarc=pass" in text)
+    dmarc_passed = "dmarc=pass" in text
+    spf_passed = "spf=pass" in text
+    dkim_passed = "dkim=pass" in text
+    return dmarc_passed and (spf_passed or dkim_passed)
 
 
 def domain_from_email(address: str) -> str:

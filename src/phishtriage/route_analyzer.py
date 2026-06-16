@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 
-from phishtriage.email_utils import domain_from_email, sender_identity_authentication_passed
+from phishtriage.email_utils import domain_from_email, visible_sender_authenticated
 from phishtriage.infrastructure_analyzer import analyze_infrastructure
 from phishtriage.models import Finding, ParsedEmail, RouteHop
 
@@ -66,7 +66,7 @@ def analyze_route(email: ParsedEmail) -> list[Finding]:
     if from_domain and first.from_host and not _looks_related_to_sender(first.from_host, from_domain):
         # Known ESPs often send from platform-owned hosts that differ from the visible brand domain.
         # If authentication passed, keep that as context instead of scoring a route mismatch.
-        if sender_identity_authentication_passed(email) and _has_known_esp_context(email):
+        if visible_sender_authenticated(email) and _has_known_esp_context(email):
             return findings
         findings.append(
             Finding(

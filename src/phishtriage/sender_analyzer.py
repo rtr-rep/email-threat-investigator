@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 from email.utils import parseaddr
 
-from phishtriage.email_utils import has_forwarding_indicators, parsed_address_domain, sender_identity_authentication_passed
+from phishtriage.email_utils import has_forwarding_indicators, parsed_address_domain, visible_sender_authenticated
 from phishtriage.infrastructure_analyzer import analyze_infrastructure
 from phishtriage.models import Finding, ParsedEmail
 from phishtriage.reply_analyzer import FREE_MAIL_DOMAINS
@@ -121,7 +121,7 @@ def analyze_sender_identity(email: ParsedEmail) -> list[Finding]:
     return_domain = _address_domain(email.return_path)
     esp_context = _has_known_esp_context(email)
     forwarding_context = has_forwarding_indicators(email)
-    auth_passed = sender_identity_authentication_passed(email)
+    auth_passed = visible_sender_authenticated(email)
 
     if _looks_random_from_address(email):
         findings.append(
