@@ -245,10 +245,29 @@ def build_display_model(parsed: ParsedEmail, result: AnalysisResult) -> dict[str
     }
 
 
+def _apply_theme_styles(st: Any) -> None:
+    st.markdown(
+        """
+        <style>
+        /* Inline technical evidence chips: domains, hosts, hashes, and defanged URLs.
+           Cyan/blue reads as neutral evidence, avoiding green's "safe/pass" signal. */
+        code:not(pre code) {
+            color: #7dd3fc !important;
+            background-color: rgba(14, 116, 144, 0.16) !important;
+            border: 1px solid rgba(125, 211, 252, 0.22) !important;
+            border-radius: 0.28rem !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def run_streamlit_app() -> None:
     import streamlit as st
 
     st.set_page_config(page_title="PhishTriage", page_icon="🛡️", layout="wide")
+    _apply_theme_styles(st)
     st.title("PhishTriage — Email Threat Investigator")
     st.caption("Upload a suspicious .eml file and get a plain-English phishing investigation report.")
 
