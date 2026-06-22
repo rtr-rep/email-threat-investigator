@@ -43,9 +43,13 @@ The project is designed as a cybersecurity portfolio showcase: explainable, evid
 - Provides both CLI and Streamlit web UI.
 - Includes safe synthetic sample emails for demos and regression tests.
 
-## Screenshots
+## Screenshots and demo
 
-The screenshots below use committed synthetic sample emails only. They do not show private inbox data or real user emails.
+The demo GIF and screenshots below use committed synthetic sample emails only. They do not show private inbox data or real user emails.
+
+### Demo GIF
+
+![PhishTriage synthetic-sample demo](docs/assets/screenshots/phishtriage-demo.gif)
 
 ### Upload screen
 
@@ -108,6 +112,19 @@ uv run streamlit run src/phishtriage/app.py
 ```
 
 Then open the local Streamlit URL and upload a `.eml` file.
+
+## 5-minute reviewer path
+
+For recruiters, instructors, or teammates who want to evaluate the project quickly:
+
+1. Run `uv sync && uv run pytest -q` to confirm the test suite is green.
+2. Run the CLI example against `samples/synthetic-paypal-raw-ip-payment-phish.eml` and confirm it explains the risky reply path, failed authentication, and raw-IP URL.
+3. Run the Streamlit UI and upload one benign sample plus one dangerous sample:
+   - benign: `samples/legitimate-company-email.eml`
+   - dangerous: `samples/synthetic-paypal-raw-ip-payment-phish.eml`
+4. Review the generated Markdown report to see how technical evidence is translated into user-facing guidance.
+
+The whole demo uses committed synthetic samples only; no real inbox data is needed.
 
 ## Example CLI output
 
@@ -267,14 +284,19 @@ This project demonstrates:
 
 ## Roadmap
 
+Completed showcase polish:
+
+- Demo screenshots and animated GIF using only synthetic samples.
+- Safe synthetic sample set covering benign, suspicious, marketing, forwarded, URL, attachment, and BEC-style scenarios.
+- A 5-minute reviewer path for quickly testing the CLI, UI, and report output.
+
 Near-term improvements:
 
-1. Add demo screenshots/GIF using only synthetic samples.
-2. Add JSON export for analyst workflows.
-3. Add confidence/evidence-completeness score separate from risk.
-4. Add batch analysis for folders of `.eml` files.
-5. Add optional URL reputation enrichment behind user-provided API keys, disabled by default.
-6. Add more benign/transactional synthetic samples to keep false positives honest.
+1. Add JSON export for analyst workflows.
+2. Add confidence/evidence-completeness score separate from risk.
+3. Add batch analysis for folders of `.eml` files.
+4. Add optional URL reputation enrichment behind user-provided API keys, disabled by default.
+5. Add more benign/transactional synthetic samples to keep false positives honest.
 
 ## Privacy and public-repo checklist
 
